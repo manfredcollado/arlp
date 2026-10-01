@@ -30,11 +30,35 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon-180.png">
 <link rel="manifest" href="site.webmanifest">
 
-<link rel="preload" as="image" type="image/webp" href="assets/wordmark-380.webp" imagesrcset="assets/wordmark-380.webp 380w, assets/wordmark-570.webp 570w" imagesizes="190px" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="assets/wordmark-380.webp" imagesrcset="assets/wordmark-380.webp 380w, assets/wordmark-570.webp 570w" imagesizes="190px">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/acadia-serif-display-latin-400-normal.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/source-serif-4-latin-400-normal.woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
-<script>document.documentElement.classList.add('js')</script>
+<script>
+(function () {
+  var d = document.documentElement; d.classList.add('js');
+  var P = [
+    { k: 'night',  d: 'assets/photo-night-1440.webp 1440w, assets/photo-night-2200.webp 2200w', m: 'assets/photo-night-m.webp',  j: 'assets/photo-night-1440.jpg',  w: 1440, h: 947 },
+    { k: 'winter', d: 'assets/photo-winter-1000.webp 1000w', m: 'assets/photo-winter-m.webp', j: 'assets/photo-winter-1000.jpg', w: 1000, h: 750 },
+    { k: 'harbor', d: 'assets/photo-harbor-1000.webp 1000w', m: 'assets/photo-harbor-m.webp', j: 'assets/photo-harbor-1000.jpg', w: 1000, h: 750 }
+  ];
+  var i;
+  try { var last = localStorage.getItem('arPhoto'); i = last === null ? Math.floor(Math.random() * P.length) : (parseInt(last, 10) + 1) % P.length; localStorage.setItem('arPhoto', i); }
+  catch (e) { i = Math.floor(Math.random() * P.length); }
+  if (!(i >= 0 && i < P.length)) i = 0;
+  var hero = P[i], band = P[(i + 1) % P.length];
+  var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.type = 'image/webp'; l.setAttribute('fetchpriority', 'high');
+  if (window.matchMedia('(max-width: 600px)').matches) { l.href = hero.m; } else { l.setAttribute('imagesrcset', hero.d); l.setAttribute('imagesizes', '100vw'); }
+  document.head.appendChild(l);
+  window.AR = {
+    render: function (slot, which) {
+      var p = which === 'hero' ? hero : band, lazy = which === 'hero' ? ' fetchpriority="high"' : ' loading="lazy"';
+      slot.parentNode.setAttribute('data-photo', p.k);
+      slot.outerHTML = '<picture class="media" aria-hidden="true"><source media="(max-width: 600px)" type="image/webp" srcset="' + p.m + '"><source type="image/webp" srcset="' + p.d + '" sizes="100vw"><img src="' + p.j + '" alt="" width="' + p.w + '" height="' + p.h + '" decoding="async"' + lazy + '></picture>';
+    }
+  };
+})();
+</script>
 <script src="site.js" defer></script>
 
 <script type="application/ld+json">
@@ -76,7 +100,7 @@
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  <div class="wrap nav">
+  <div class="container nav">
       <a class="home" href="./" aria-label="Acadia Ridge — home">
         <picture>
           <source type="image/webp" srcset="assets/wordmark-380.webp 380w, assets/wordmark-570.webp 570w" sizes="190px">
@@ -94,56 +118,86 @@
   </div>
 </header>
 
-<div class="wrap">
-
   <main id="main">
     <h1 class="visually-hidden">Acadia Ridge LP</h1>
 
-    <div class="hero">
-      <p class="lead">At Acadia Ridge, we focus on deep fundamental research, analyzing market trends and company performance to find mispriced opportunities.</p>
-    </div>
-
-    <section id="approach" class="approach" aria-labelledby="approach-h">
-      <h2 id="approach-h" class="label">Approach</h2>
-      <p>We run a long-biased long/short equity strategy informed by global macro themes, making conviction-driven investments and adjusting as market dynamics shift. Macro insights on interest rates, currencies, and geopolitics serve as both a hedge and an enhancer for our stock positions.</p>
-      <p>A key pillar of our strategy is our belief in the power of management teams and first-person diligence. The central question in every investment is whether management can execute, and we engage directly with companies to answer it—buying their products, attending investor days, visiting local markets, and drawing on a network of analysts, experts, and industry veterans.</p>
-      <p>Our portfolios typically hold 20 to 25 of our best ideas across technology, healthcare, and select emerging markets. Each investment starts with a clearly defined thesis, grounded in a thorough research process. Ideas are vetted with an advisory board of veteran investors, sized within defined position, sector, and factor limits, and revisited through ongoing reviews. We use AI and data tools to support our research, monitor portfolio risk, and track the macro environment, while investment decisions remain grounded in fundamental judgment.</p>
-    </section>
-
-    <section id="firm" class="firm" aria-labelledby="firm-h">
-      <h2 id="firm-h" class="label">Firm</h2>
-      <p>Acadia Ridge is a private investment firm based in New York. It was formalized in 2025, following a two-year record of strong returns relative to major equity benchmarks while managing personal and friends-and-family capital. The firm invests on behalf of a small number of partners—high-net-worth individuals, family offices, and foundations—and accepts new capital by introduction only.</p>
-      <p>The firm is founder-owned and 100% minority-owned, and is supported by an independent administrator, prime broker, and legal counsel, with monthly reporting to partners.</p>
-      <p>Acadia Ridge is named for Acadia National Park in Maine, where our founder and his wife were married and later taught their son to walk on the Acadia Ridge trail.</p>
-    </section>
-
-    <section id="founder" class="founder" aria-labelledby="founder-h">
-      <h2 id="founder-h" class="label">Founder</h2>
-      <div>
-        <h3>Manfred Collado</h3>
-        <p class="title">Founder and Managing Partner</p>
-        <p>Manfred Collado founded Acadia Ridge to invest without the short-term pressures that shape most public-market capital. He leads the firm's research, is responsible for every portfolio decision, and has invested the substantial majority of his liquid net worth in the fund on the same terms as the partners.</p>
-        <p>His edge as an investor comes from a diverse set of experiences. He has worked on a trading floor at Goldman Sachs, taught in a high-need school with Teach For America, launched global products for Amazon, and assessed investments for TRS of Illinois, one of the largest U.S. pension funds. At AlixPartners, he collaborated with leading GPs, hedge funds, and management teams during major transactions and crises.</p>
-        <p>Having been on the LP side, worked outside of finance, and managed teams beyond analysts, he brings a distinct perspective on leadership and execution.</p>
-        <p>The son of a single mother, he credits his background with instilling resilience and ambition. He holds a BA from the University of Pennsylvania and an MBA from the University of Chicago Booth School of Business, and is a Robert Toigo Foundation Fellow.</p>
+    <section class="hero" aria-label="Introduction">
+      <span class="photo-slot"></span><script>AR.render(document.currentScript.previousElementSibling, 'hero')</script>
+      <noscript><picture class="media" aria-hidden="true"><source media="(max-width: 600px)" type="image/webp" srcset="assets/photo-night-m.webp"><source type="image/webp" srcset="assets/photo-night-1440.webp 1440w, assets/photo-night-2200.webp 2200w" sizes="100vw"><img src="assets/photo-night-1440.jpg" alt="" width="1440" height="947"></picture></noscript>
+      <div class="container hero-inner">
+        <p class="eyebrow">Private Investment Firm &middot; New York</p>
+        <p class="hero-statement">At Acadia Ridge, we focus on deep fundamental research, analyzing market trends and company performance to find mispriced opportunities.</p>
+        <dl class="facts">
+          <div><dt>Formalized</dt><dd>2025</dd></div>
+          <div><dt>Based</dt><dd>New York</dd></div>
+          <div><dt>Strategy</dt><dd>Long-short equity</dd></div>
+          <div><dt>Focus</dt><dd>Technology, healthcare, emerging markets</dd></div>
+        </dl>
       </div>
     </section>
 
-    <section id="contact" class="contact" aria-labelledby="contact-h">
-      <h2 id="contact-h" class="label">Contact</h2>
-      <p>The firm does not solicit. Inquiries from qualified institutions and families are welcome by introduction.</p>
-      <div class="offices">
-        <address><strong>New York Office</strong>45 Rockefeller Plaza, Suite 2000<br>New York, NY 10111</address>
-        <address><strong>Inquiries</strong><a href="mailto:info@acadiaridgelp.com">info@AcadiaRidgeLP.com</a><br><a href="tel:+19293793853">+1 (929) 379-3853</a></address>
+    <section id="approach" class="block" aria-labelledby="approach-h">
+      <div class="container grid">
+        <div class="side"><p class="num">01</p><h2 id="approach-h" class="label">Approach</h2></div>
+        <div class="body reveal">
+          <p class="intro">We run a long-biased long/short equity strategy informed by global macro themes, making conviction-driven investments and adjusting as market dynamics shift. Macro insights on interest rates, currencies, and geopolitics serve as both a hedge and an enhancer for our stock positions.</p>
+          <p>A key pillar of our strategy is our belief in the power of management teams and first-person diligence. The central question in every investment is whether management can execute, and we engage directly with companies to answer it—buying their products, attending investor days, visiting local markets, and drawing on a network of analysts, experts, and industry veterans.</p>
+          <p>Our portfolios typically hold 20 to 25 of our best ideas across technology, healthcare, and select emerging markets. Each investment starts with a clearly defined thesis, grounded in a thorough research process. Ideas are vetted with an advisory board of veteran investors, sized within defined position, sector, and factor limits, and revisited through ongoing reviews. We use AI and data tools to support our research, monitor portfolio risk, and track the macro environment, while investment decisions remain grounded in fundamental judgment.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="firm" class="block" aria-labelledby="firm-h">
+      <div class="container grid">
+        <div class="side"><p class="num">02</p><h2 id="firm-h" class="label">Firm</h2></div>
+        <div class="body reveal">
+          <p class="intro">Acadia Ridge is a private investment firm based in New York. It was formalized in 2025, following a two-year record of strong returns relative to major equity benchmarks while managing personal and friends-and-family capital. The firm invests on behalf of a small number of partners—high-net-worth individuals, family offices, and foundations—and accepts new capital by introduction only.</p>
+          <p>The firm is founder-owned and 100% minority-owned, and is supported by an independent administrator, prime broker, and legal counsel, with monthly reporting to partners.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="namesake" aria-label="The name">
+      <span class="photo-slot"></span><script>AR.render(document.currentScript.previousElementSibling, 'band')</script>
+      <noscript><picture class="media" aria-hidden="true"><source type="image/webp" srcset="assets/photo-harbor-1000.webp"><img src="assets/photo-harbor-1000.jpg" alt="" width="1000" height="750" loading="lazy"></picture></noscript>
+      <div class="container namesake-inner reveal">
+        <p class="eyebrow">Acadia National Park &middot; Maine</p>
+        <p class="namesake-text">Acadia Ridge is named for Acadia National Park in Maine, where our founder and his wife were married and later taught their son to walk on the Acadia Ridge trail.</p>
+      </div>
+    </aside>
+
+    <section id="founder" class="block" aria-labelledby="founder-h">
+      <div class="container grid">
+        <div class="side"><p class="num">03</p><h2 id="founder-h" class="label">Founder</h2></div>
+        <div class="body reveal">
+          <h3>Manfred Collado</h3>
+          <p class="title">Founder and Managing Partner</p>
+          <p class="intro">Manfred Collado founded Acadia Ridge to invest without the short-term pressures that shape most public-market capital. He leads the firm's research, is responsible for every portfolio decision, and has invested the substantial majority of his liquid net worth in the fund on the same terms as the partners.</p>
+          <p>His edge as an investor comes from a diverse set of experiences. He has worked on a trading floor at Goldman Sachs, taught in a high-need school with Teach For America, launched global products for Amazon, and assessed investments for TRS of Illinois, one of the largest U.S. pension funds. At AlixPartners, he collaborated with leading GPs, hedge funds, and management teams during major transactions and crises.</p>
+          <p>Having been on the LP side, worked outside of finance, and managed teams beyond analysts, he brings a distinct perspective on leadership and execution.</p>
+          <p>The son of a single mother, he credits his background with instilling resilience and ambition. He holds a BA from the University of Pennsylvania and an MBA from the University of Chicago Booth School of Business, and is a Robert Toigo Foundation Fellow.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="block contact" aria-labelledby="contact-h">
+      <div class="container grid">
+        <div class="side"><p class="num">04</p><h2 id="contact-h" class="label">Contact</h2></div>
+        <div class="body reveal">
+          <p class="intro">The firm does not solicit. Inquiries from qualified institutions and families are welcome by introduction.</p>
+          <div class="offices">
+            <address><strong>New York Office</strong>45 Rockefeller Plaza, Suite 2000<br>New York, NY 10111</address>
+            <address><strong>Inquiries</strong><a href="mailto:info@acadiaridgelp.com">info@AcadiaRidgeLP.com</a><br><a href="tel:+19293793853">+1 (929) 379-3853</a></address>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer>
+  <footer class="container">
     <div class="row"><span>© 2025–2026 Acadia Ridge LP</span><a href="https://portal.navfundservices.com/navportalcore/login" target="_blank" rel="noopener">Investor Login<span class="visually-hidden"> (opens in a new window)</span></a></div>
     <p>This website is for informational purposes only and does not constitute an offer to sell, or a solicitation of an offer to buy, any interest in any fund. Any such offer will be made only by means of confidential offering documents, to qualified investors, in jurisdictions where permitted. Past performance is not indicative of future results. References to prior performance relate to capital managed before the formation of Acadia Ridge LP and are not a representation of the performance of any fund. Performance information is available to qualified investors upon request.</p>
   </footer>
-</div>
 
 <a class="to-top" href="#top" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
 </body>
