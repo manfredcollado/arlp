@@ -133,6 +133,13 @@ html:not(.js) .to-top { visibility: visible; opacity: 1; position: static; margi
 .button { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; background: var(--green); color: var(--cream); padding: 13px 34px; font: 400 13px var(--sans); text-decoration: none; }
 .button:hover { color: var(--cream); background: var(--green-deep); }
 
+/* Large screens: keep photo panels to the page width so images stay sharp */
+@media (min-width: 1200px) {
+  .hero, .namesake { max-width: var(--max); margin-left: auto; margin-right: auto; }
+  .namesake { margin-top: 0; }
+  .hero-inner { min-height: min(calc(100vh - 82px), 760px); }
+}
+
 /* Subtle reveal on scroll */
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }

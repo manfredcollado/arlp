@@ -14,6 +14,7 @@ Static website for Acadia Ridge LP, hosted on GitHub Pages. No build step.
 
 ## Editing
 - Copy lives in `index.html`; styles in `styles.css`.
+- After changing `styles.css` or `site.js`, bump the `?v=` number where they are linked in `index.html` and `404.html` so browsers fetch the new version instead of a cached one.
 - If the description changes, update the `<meta name="description">`, `og:description`, `twitter:description` and JSON-LD `description` together.
 - Update `<lastmod>` in `sitemap.xml` when content changes.
 - Investor Login links go directly to the NAV Fund Services portal.
